@@ -14,13 +14,17 @@ class AI:
 
     def run_game(self):
         while  True:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    sys.exit()
+            self._check_events()
+    def  _check_events(self):
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
                   
             self.screen.fill(self.sett.bg_color)
             self.ship.blitme()
             pygame.display.flip()
+    
 
 if __name__=='__main__':
     
