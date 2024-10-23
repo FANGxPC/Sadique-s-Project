@@ -20,11 +20,13 @@ class AI:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
-                  
+            elif event.type==pygame.KEYDOWN:
+                if event.key==pygame.K_RIGHT:
+                    self.ship.rect.x+=10
             self.screen.fill(self.sett.bg_color)
             self.ship.blitme()
             pygame.display.flip()
-    
+
 
 if __name__=='__main__':
     
