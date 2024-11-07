@@ -8,7 +8,10 @@ class AI:
     def __init__(self):
         pygame.init()
         self.sett=custom_sett()
-        self.screen=pygame.display.set_mode((self.sett.screen_width,self.sett.screen_height))
+        self.screen=pygame.display.set_mode((0,0),pygame.FULLSCREEN)
+        self.sett.screen_width=self.screen.get_rect().width
+        self.sett.screen_height=self.screen.get_rect().height
+        
         pygame.display.set_caption('Alien Attacker')
         self.ship=Ship(self)
     
@@ -20,21 +23,30 @@ class AI:
             self.screen.fill(self.sett.bg_color)
             self.ship.blitme()
             pygame.display.flip()
+    
     def  _check_events(self):
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
+
             elif event.type==pygame.KEYDOWN:
-                if event.key==pygame.K_RIGHT:
-                    self.ship.moving_right=True
-                if event.key==pygame.K_LEFT:
-                    self.ship.moving_left=True
+                self.check_keydown_events(event)
+                
 
             elif event.type==pygame.KEYUP:
-                if event.key==pygame.K_RIGHT:
+                self.check_keyup_events(event)
+                
+    def check_keydown_events(self,event):
+        if event.key==pygame.K_RIGHT:
+                    self.ship.moving_right=True
+        if event.key==pygame.K_LEFT:
+                    self.ship.moving_left=True
+        if event.key==pygame.K_q:
+              sys.exit()
+    def check_keyup_events(self,event):
+        if event.key==pygame.K_RIGHT:
                     self.ship.moving_right=False
-                if event.key==pygame.K_LEFT:
+        if event.key==pygame.K_LEFT:
                     self.ship.moving_left=False
 
 
