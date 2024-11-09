@@ -8,10 +8,16 @@ class Ship:
         self.moving_right=False
         self.moving_left=False
         self.image=pygame.image.load('images/UFO.bmp')
-        self.image = pygame.transform.scale(self.image, (100,170))  
+        self.image = pygame.transform.scale(self.image, (100,100))  
         self.rect=self.image.get_rect()
-        self.x=float(self.rect.x)
+        
+        # print(f"Screen rect: {self.screen_rect}") 
+        # print(f"Ship rect before positioning: {self.rect}")
         self.rect.midbottom=self.screen_rect.midbottom
+       
+        self.x=float(self.rect.x)
+
+
 
     def blitme(self):
         self.screen.blit(self.image,self.rect)
