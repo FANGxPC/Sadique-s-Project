@@ -23,7 +23,7 @@ class AI:
         while  True:
             self._check_events()
             self.ship.update()
-            
+            self._update_aliens()
             self._update_bullets()
             self.screen.fill(self.sett.bg_color)
             self.ship.blitme()
@@ -37,7 +37,23 @@ class AI:
             for bullet in self.bullets.copy():
                   if bullet.rect.bottom <= 0:
                         self.bullets.remove(bullet)
-            # print(len(self.bullets))
+    
+    def _update_aliens(self):
+          self._check_fleet_edges()
+          self.aliens.update()
+
+
+    def _check_fleet_edges(self):
+          for alien in self.aliens.sprites():
+                if alien.check_edges():
+                      self._change_fleet_direction()
+                      break
+                
+    def _change_fleet_direction(self):
+          for alien in self.aliens.sprites():
+                alien.rect.y += (self.sett.fleet_drop)
+          self.sett.fleet_direction*=-1
+
 
     def _create_fleet(self):
           alien=Alien(self)

@@ -9,3 +9,6 @@ class custom_sett:
         self.bullet_height=15
         self.bullet_color=(60,60,60)
         self.bullet_allowed=3
+        self.alien_speed=1.0
+        self.fleet_drop=10
+        self.fleet_direction=1
