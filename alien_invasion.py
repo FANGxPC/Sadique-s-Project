@@ -39,7 +39,7 @@ class AI:
                         self.bullets.remove(bullet)
             collisions=pygame.sprite.groupcollide(self.bullets,self.aliens,True,True)
     
-    def _update_aliens(self):
+    def _update_aliens(self):    
           self._check_fleet_edges()
           self.aliens.update()
 
@@ -95,6 +95,10 @@ class AI:
                     self.ship.moving_right=True
         if event.key==pygame.K_LEFT:
                     self.ship.moving_left=True
+        if event.key==pygame.K_UP:
+               self.ship.moving_up=True
+        if event.key==pygame.K_DOWN:
+               self.ship.moving_down=True
         if event.key==pygame.K_q:
               sys.exit()
         if event.key==pygame.K_SPACE:
@@ -106,6 +110,10 @@ class AI:
                     self.ship.moving_right=False
         if event.key==pygame.K_LEFT:
                     self.ship.moving_left=False
+        if event.key==pygame.K_UP:
+               self.ship.moving_up=False
+        if event.key==pygame.K_DOWN:
+               self.ship.moving_down=False
 
     def _fire_bullet(self):
           if len(self.bullets)<self.sett.bullet_allowed:
