@@ -10,5 +10,6 @@ class custom_sett:
         self.bullet_color=(60,60,60)
         self.bullet_allowed=30
         self.alien_speed=1.0
-        self.fleet_drop=10
+        self.fleet_drop=100
+        self.ship_limit=3
         self.fleet_direction=1
