@@ -27,6 +27,7 @@ class AI:
     def run_game(self):
         while  True:
             self._check_events()
+            self._close_game()
             if self.stats.game_active:
                   self.ship.update()
                   self._update_aliens()
@@ -86,8 +87,10 @@ class AI:
           self._create_fleet()
           self.ship.center_ship()
           sleep(0.5)
-      else:
-            self.stats.game_active-False
+    
+    def _close_game(self):
+          if self.stats.ships_left<=0:
+                self.stats.game_active=False
 
 
     def _create_fleet(self):
