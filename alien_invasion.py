@@ -5,6 +5,7 @@ from sship import Ship
 from time import sleep
 from game_stats import GameStats
 from bullet import Bullet
+from button import Button
 from alien import Alien
 
 class AI:
@@ -20,6 +21,7 @@ class AI:
         self.bullets=pygame.sprite.Group()
         self.aliens=pygame.sprite.Group()
         self._create_fleet()
+        self.play_button=Button(self,"Play")
       
 
           
@@ -28,6 +30,8 @@ class AI:
         while  True:
             self._check_events()
             self._close_game()
+            if not self.stats.game_active:
+                  self.play_button.draw_button()
             if self.stats.game_active:
                   self.ship.update()
                   self._update_aliens()
@@ -37,7 +41,8 @@ class AI:
                   for bullet in self.bullets.sprites():
                         bullet.draw_bullet()
                   self.aliens.draw(self.screen)
-                  pygame.display.flip()
+                  
+            pygame.display.flip()
 
     def _update_bullets(self):
             self.bullets.update()
@@ -87,10 +92,14 @@ class AI:
           self._create_fleet()
           self.ship.center_ship()
           sleep(0.5)
+      else:
+            self.stats.game_active=False
+            pygame.mouse.set_visible(True)
     
     def _close_game(self):
           if self.stats.ships_left<=0:
                 self.stats.game_active=False
+                pygame.mouse.set_visible(True)
 
 
     def _create_fleet(self):
@@ -122,11 +131,25 @@ class AI:
 
             elif event.type==pygame.KEYDOWN:
                 self.check_keydown_events(event)
-                
+            
+            elif event.type==pygame.MOUSEBUTTONDOWN:
+                  mouse_pos=pygame.mouse.get_pos()
+                  self._check_play_button(mouse_pos)
 
             elif event.type==pygame.KEYUP:
                 self.check_keyup_events(event)
                 
+
+    def _check_play_button(self,mouse_pos):
+            if self.play_button.rect.collidepoint(mouse_pos) and not self.stats.game_active:
+                  self.stats.reset_stats()
+                  self.stats.game_active=True
+                  self.aliens.empty()
+                  self.bullets.empty()
+                  self._create_fleet()
+                  self.ship.center_ship()
+                  pygame.mouse.set_visible(False)
+
     def check_keydown_events(self,event):
         if event.key==pygame.K_RIGHT:
                     self.ship.moving_right=True
