@@ -22,7 +22,8 @@ class AI:
         self.aliens=pygame.sprite.Group()
         self._create_fleet()
         self.play_button=Button(self,"Play")
-      
+        
+        
 
           
 
@@ -53,6 +54,7 @@ class AI:
             if not self.aliens:
                   self.bullets.empty()
                   self._create_fleet()
+                  self.sett.increase_speed()
                   
 
     def _update_aliens(self):    
@@ -62,7 +64,7 @@ class AI:
           if pygame.sprite.spritecollideany(self.ship,self.aliens):
             self._ship_hit()
             
-            print(self.stats.ships_left)
+            # print(self.stats.ships_left)
 
     def _check_fleet_edges(self):
           for alien in self.aliens.sprites():
@@ -148,6 +150,7 @@ class AI:
                   self.bullets.empty()
                   self._create_fleet()
                   self.ship.center_ship()
+                  self.sett.initialize_dynamic_settings()
                   pygame.mouse.set_visible(False)
 
     def check_keydown_events(self,event):
