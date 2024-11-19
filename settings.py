@@ -13,7 +13,7 @@ class custom_sett:
         self.fleet_drop=50
         self.ship_limit=3
         self.fleet_direction=1
-        self.speedup_scale=5.5
+        self.speedup_scale=1.5
         self.initialize_dynamic_settings()
 
     def initialize_dynamic_settings(self):
