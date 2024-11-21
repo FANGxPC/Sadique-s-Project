@@ -7,6 +7,9 @@ from game_stats import GameStats
 from bullet import Bullet
 from button import Button
 from alien import Alien
+from easy_button import Easy
+from hard_button import Hard
+from med_button import Med
 
 class AI:
     def __init__(self):
@@ -22,6 +25,13 @@ class AI:
         self.aliens=pygame.sprite.Group()
         self._create_fleet()
         self.play_button=Button(self,"Play")
+        self.easy_button=Easy(self,"Easy")
+        self.med_button=Med(self,"Medium")
+        self.hard_button=Hard(self,"Hard")
+        self.noob=pygame.image.load('images/images.jpeg')
+        self.noob = pygame.transform.scale(self.noob, (1200,800))  
+        self.noob_rect=self.noob.get_rect()
+        self.lvl_flag=False
         
         
 
@@ -31,8 +41,12 @@ class AI:
         while  True:
             self._check_events()
             self._close_game()
-            if not self.stats.game_active:
+            if not self.stats.game_active and self.lvl_flag==False:
                   self.play_button.draw_button()
+            if not self.stats.game_active and self.lvl_flag==True:
+                  self.easy_button.draw_button()
+                  self.med_button.draw_button()
+                  self.hard_button.draw_button()
             if self.stats.game_active:
                   self.ship.update()
                   self._update_aliens()
@@ -101,7 +115,10 @@ class AI:
     def _close_game(self):
           if self.stats.ships_left<=0:
                 self.stats.game_active=False
+                self.lvl_flag=False
                 pygame.mouse.set_visible(True)
+                self.screen.blit(self.noob,self.noob_rect)
+                
 
 
     def _create_fleet(self):
@@ -136,22 +153,66 @@ class AI:
             
             elif event.type==pygame.MOUSEBUTTONDOWN:
                   mouse_pos=pygame.mouse.get_pos()
+                  if self.lvl_flag:
+                        self._easy_play_button(mouse_pos)
+                        self._med_play_button(mouse_pos)
+                        self._hard_play_button(mouse_pos)
                   self._check_play_button(mouse_pos)
+            
 
             elif event.type==pygame.KEYUP:
                 self.check_keyup_events(event)
                 
-
-    def _check_play_button(self,mouse_pos):
-            if self.play_button.rect.collidepoint(mouse_pos) and not self.stats.game_active:
+    def _easy_play_button(self,mouse_pos):
+            if self.easy_button.rect.collidepoint(mouse_pos) and not self.stats.game_active:
                   self.stats.reset_stats()
                   self.stats.game_active=True
                   self.aliens.empty()
                   self.bullets.empty()
                   self._create_fleet()
                   self.ship.center_ship()
-                  self.sett.initialize_dynamic_settings()
-                  pygame.mouse.set_visible(False)
+                  self.sett.initialize_dynamic_settings1()
+                  pygame.mouse.set_visible(True)
+
+    def _med_play_button(self,mouse_pos):
+            if self.med_button.rect.collidepoint(mouse_pos) and not self.stats.game_active:
+                  self.stats.reset_stats()
+                  self.stats.game_active=True
+                  self.aliens.empty()
+                  self.bullets.empty()
+                  self._create_fleet()
+                  self.ship.center_ship()
+                  self.sett.initialize_dynamic_settings2()
+                  pygame.mouse.set_visible(True)
+
+    def _hard_play_button(self,mouse_pos):
+            if self.hard_button.rect.collidepoint(mouse_pos) and not self.stats.game_active:
+                  self.stats.reset_stats()
+                  self.stats.game_active=True
+                  self.aliens.empty()
+                  self.bullets.empty()
+                  self._create_fleet()
+                  self.ship.center_ship()
+                  self.sett.initialize_dynamic_settings3()
+                  pygame.mouse.set_visible(True)
+
+
+    def _check_play_button(self,mouse_pos):
+            if self.play_button.rect.collidepoint(mouse_pos) and not self.stats.game_active:
+                  self.stats.reset_stats()
+                  #self.stats.game_active=True
+                  self.aliens.empty()
+                  self.bullets.empty()
+                  self._create_fleet()
+                  self.ship.center_ship()
+                  #self.sett.initialize_dynamic_settings()
+                  pygame.mouse.set_visible(True)
+                  self.lvl_flag=True
+            
+                  
+
+
+
 
     def check_keydown_events(self,event):
         if event.key==pygame.K_RIGHT:

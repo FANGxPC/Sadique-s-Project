@@ -14,13 +14,28 @@ class custom_sett:
         self.ship_limit=3
         self.fleet_direction=1
         self.speedup_scale=1.5
-        self.initialize_dynamic_settings()
+        self.initialize_dynamic_settings1()
+        self.initialize_dynamic_settings2()
+        self.initialize_dynamic_settings3()
 
-    def initialize_dynamic_settings(self):
+    def initialize_dynamic_settings1(self):
         self.ship_speed=1.5
-        self.bullet_speed=3.0
+        self.bullet_speed=5.0
         self.alien_speed=1.0
         self.fleet_direction=1
+
+    def initialize_dynamic_settings2(self):
+        self.ship_speed=2
+        self.bullet_speed=5.0
+        self.alien_speed=2.0
+        self.fleet_direction=1
+
+    def initialize_dynamic_settings3(self):
+        self.ship_speed=2.2
+        self.bullet_speed=5.0
+        self.alien_speed=2.5
+        self.fleet_direction=1
+
         
     def increase_speed(self):
         self.ship_speed *= self.speedup_scale
