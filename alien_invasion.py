@@ -32,7 +32,8 @@ class AI:
         self.noob = pygame.transform.scale(self.noob, (1200,800))  
         self.noob_rect=self.noob.get_rect()
         self.lvl_flag=False
-        
+        self.bullet_firing_rate = 2
+        self.last_bullet_time =0
         
 
           
@@ -50,6 +51,7 @@ class AI:
             if self.stats.game_active:
                   self.ship.update()
                   self._update_aliens()
+                  self._fire_bullet()
                   self._update_bullets()
                   self.screen.fill(self.sett.bg_color)
                   self.ship.blitme()
@@ -225,8 +227,7 @@ class AI:
                self.ship.moving_down=True
         if event.key==pygame.K_q:
               sys.exit()
-        if event.key==pygame.K_SPACE :
-              
+        if event.key==pygame.K_SPACE :  
               self._fire_bullet()
 
 
@@ -241,11 +242,13 @@ class AI:
                self.ship.moving_down=False
 
     def _fire_bullet(self):
-          if len(self.bullets)<self.sett.bullet_allowed:
-            new_bullet = Bullet(self)
-            self.bullets.add(new_bullet)
-          else:
-                pass  
+      current_time = pygame.time.get_ticks() / 1000
+      print(current_time)
+      if current_time - self.last_bullet_time > self.bullet_firing_rate and len(self.bullets) < self.sett.bullet_allowed:
+        new_bullet = Bullet(self)
+        self.bullets.add(new_bullet)
+        self.last_bullet_time = current_time
+  
 
 
 
