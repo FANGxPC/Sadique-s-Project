@@ -1,3 +1,4 @@
+import json
 import sys
 import pygame
 from settings import custom_sett
@@ -9,6 +10,7 @@ from button import Button
 from alien import Alien
 from easy_button import Easy
 from hard_button import Hard
+from scoreboard import Scoreboard
 from med_button import Med
 
 class AI:
@@ -32,9 +34,9 @@ class AI:
         self.noob = pygame.transform.scale(self.noob, (1200,800))  
         self.noob_rect=self.noob.get_rect()
         self.lvl_flag=False
-        self.bullet_firing_rate = 2
+        self.bullet_firing_rate = 0.1
         self.last_bullet_time =0
-        
+        self.sb=Scoreboard(self)
 
           
 
@@ -58,7 +60,9 @@ class AI:
                   for bullet in self.bullets.sprites():
                         bullet.draw_bullet()
                   self.aliens.draw(self.screen)
+                  self.sb.show_score()
                   
+
             pygame.display.flip()
 
     def _update_bullets(self):
@@ -67,10 +71,18 @@ class AI:
                   if bullet.rect.bottom <= 0:
                         self.bullets.remove(bullet)
             collisions=pygame.sprite.groupcollide(self.bullets,self.aliens,True,True)
+            if collisions:
+                  for aliens in collisions.values():
+
+                        self.stats.score+=self.sett.alien_points*len(aliens)
+                  self.sb.prep_score()
+                  self.sb.check_high_score()
             if not self.aliens:
                   self.bullets.empty()
                   self._create_fleet()
                   self.sett.increase_speed()
+                  self.stats.level+=1
+                  self.sb.prep_level()
                   
 
     def _update_aliens(self):    
@@ -148,7 +160,13 @@ class AI:
     def  _check_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                
+                data = str(self.stats.high_score)
+                with open('high.json','w') as file:
+                      
+                      file.write(data)
                 sys.exit()
+
 
             elif event.type==pygame.KEYDOWN:
                 self.check_keydown_events(event)
@@ -164,7 +182,7 @@ class AI:
 
             elif event.type==pygame.KEYUP:
                 self.check_keyup_events(event)
-                
+
     def _easy_play_button(self,mouse_pos):
             if self.easy_button.rect.collidepoint(mouse_pos) and not self.stats.game_active:
                   self.stats.reset_stats()
@@ -210,6 +228,7 @@ class AI:
                   #self.sett.initialize_dynamic_settings()
                   pygame.mouse.set_visible(True)
                   self.lvl_flag=True
+                  self.sb.prep_score()
             
                   
 
@@ -226,7 +245,13 @@ class AI:
         if event.key==pygame.K_DOWN:
                self.ship.moving_down=True
         if event.key==pygame.K_q:
+              
+              data = str(self.stats.high_score)
+              with open('high.json','w') as file:
+                      file.write(data)
               sys.exit()
+
+
         if event.key==pygame.K_SPACE :  
               self._fire_bullet()
 
@@ -243,7 +268,6 @@ class AI:
 
     def _fire_bullet(self):
       current_time = pygame.time.get_ticks() / 1000
-      print(current_time)
       if current_time - self.last_bullet_time > self.bullet_firing_rate and len(self.bullets) < self.sett.bullet_allowed:
         new_bullet = Bullet(self)
         self.bullets.add(new_bullet)
