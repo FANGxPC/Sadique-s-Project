@@ -6,6 +6,8 @@ from sship import Ship
 from time import sleep
 from game_stats import GameStats
 from bullet import Bullet
+from random import randint
+from star import Star
 from button import Button
 from alien import Alien
 from easy_button import Easy
@@ -18,12 +20,17 @@ class AI:
         pygame.init()
         self.sett=custom_sett()
         self.screen=pygame.display.set_mode((0,0),pygame.FULLSCREEN)
+        self.sett_rect=self.screen.get_rect()
         self.sett.screen_width=self.screen.get_rect().width
         self.sett.screen_height=self.screen.get_rect().height
         pygame.display.set_caption('Alien Attacker')
         self.stats=GameStats(self)
         self.ship=Ship(self)
         self.bullets=pygame.sprite.Group()
+        self.color=(0,0, 0)
+      
+        self.stars=pygame.sprite.Group()
+        self._create_stars()
         self.aliens=pygame.sprite.Group()
         self._create_fleet()
         self.play_button=Button(self,"Play")
@@ -54,8 +61,11 @@ class AI:
                   self.ship.update()
                   self._update_aliens()
                   self._fire_bullet()
+                  self._change_stars_direction()
+                  self._update_stars()
                   self._update_bullets()
-                  self.screen.fill(self.sett.bg_color)
+                  self.screen.fill(self.color)
+                  self.stars.draw(self.screen)
                   self.ship.blitme()
                   for bullet in self.bullets.sprites():
                         bullet.draw_bullet()
@@ -272,9 +282,60 @@ class AI:
         new_bullet = Bullet(self)
         self.bullets.add(new_bullet)
         self.last_bullet_time = current_time
-  
+    
+     
+##    
+
+    def _create_stars(self):
+          star=Star(self)
+          star_width,star_height=star.rect.size
+          available_space_x=self.sett.screen_width-(2*star_width)
+        #   ship_height=self.star.rect.height
+          available_space_y=(self.sett.screen_height-(3*star_height))
+          number_rows=available_space_y//(2*star_height)
+          number_stars_x=available_space_x//(2*star_width)
+          for row_number in range(number_rows):
+            for star_number in range(number_stars_x):
+                self.random_number=randint(1,100)
+                if self.random_number in [6,8] :
+                     self.flag=True
+                else:
+                    self.flag=False
+                if self.flag:
+                    self._create_star(star_number,row_number)
+    
+    # def _the_loop(self):
+    #       while len(self.stars)==0:
+    #             self._create_fleet()
+                
+
+    def _update_stars(self):
+            self.stars.update()
+            for bullet in self.stars.copy():
+                  if bullet.rect.bottom >= self.sett_rect.bottom:
+                        bullet.rect.top=self.sett_rect.top
+
+                        # print(len(self.stars))
+
+    def _create_star(self,star_number,row_number):
+                star=Star(self)
+                star_width,star_height=star.rect.size
+                star.x=star_width+2*star_width*star_number
+                star.rect.x=star.x
+                star.rect.y=star.rect.height+2*star.rect.height*row_number
+                self.stars.add(star)
+
+    def _change_stars_direction(self):
+        #   self.ship.rect.y-=1
+          for star in self.stars.sprites():
+                star.rect.y += (1)
 
 
+
+
+
+
+##
 
 
 

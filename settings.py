@@ -7,7 +7,7 @@ class custom_sett:
         self.bullet_speed=0.0
         self.bullet_width=6
         self.bullet_height=20
-        self.bullet_color=(60,60,60)
+        self.bullet_color=(220,220,220)
         self.bullet_allowed=300
         self.alien_speed=1.0
         self.fleet_drop=50
