@@ -1,3 +1,2 @@
-# Sadique-s-Project
-#This is my first time here.
-Damn bro its tuff
+Alien game .
+Learned from an E-Book.
